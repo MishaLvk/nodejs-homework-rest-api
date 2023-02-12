@@ -1,5 +1,5 @@
 const express = require("express");
-// const contacts = require("../../models/contacts.js");
+
 const {
   getContacts,
   getContact,
