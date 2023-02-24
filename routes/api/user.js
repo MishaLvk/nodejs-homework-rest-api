@@ -7,9 +7,10 @@ const {
   getContacts,
   current,
   logout,
+  uploadImage,
 } = require("../../controllers/user/user.controller.js");
 
-const { auth } = require("../../middlewares/index.js");
+const { auth, upload } = require("../../middlewares/index.js");
 const userRouter = express.Router();
 
 userRouter.post("/register", tryCatchWrapper(register));
@@ -21,5 +22,11 @@ userRouter.get("/", tryCatchWrapper(auth), tryCatchWrapper(getContacts));
 userRouter.get("/current", tryCatchWrapper(auth), tryCatchWrapper(current));
 
 userRouter.post("/logout", tryCatchWrapper(auth), tryCatchWrapper(logout));
+userRouter.patch(
+  "/avatars",
+  tryCatchWrapper(auth),
+  upload.single("avatar"),
+  tryCatchWrapper(uploadImage)
+);
 
 module.exports = { userRouter };
