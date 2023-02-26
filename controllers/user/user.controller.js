@@ -1,4 +1,6 @@
 // const { User } = require("../../models/user");
+const { HOST_PORT } = process.env;
+
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../../models/user.js");
@@ -111,17 +113,12 @@ async function uploadImage(req, res, next) {
   const { user } = req;
   const { _id } = user;
   const tmpPath = path.resolve(__dirname, "../../tmp", filename);
-
+  const publicPath = path.resolve(__dirname, "../../public/avatars", filename);
   try {
     const image = await Jimp.read(tmpPath);
     await image.resize(250, 250);
     await image.writeAsync(tmpPath);
 
-    const publicPath = path.resolve(
-      __dirname,
-      "../../public/avatars",
-      filename
-    );
     await fs.rename(tmpPath, publicPath);
   } catch (error) {
     await fs.unlink(tmpPath);
@@ -130,7 +127,9 @@ async function uploadImage(req, res, next) {
 
   await User.findByIdAndUpdate(
     _id,
-    { avatarURL: `/avatars/${filename}` },
+    {
+      avatarURL: `http://localhost:${process.env.HOST_PORT}/avatars/${filename}`,
+    },
     {
       new: true,
     }
