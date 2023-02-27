@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/user.js");
+const multer = require("multer");
+const path = require("path");
 
 async function auth(req, res, next) {
   const authHeader = req.headers.authorization || "";
@@ -29,6 +31,21 @@ async function auth(req, res, next) {
   next();
 }
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.resolve(__dirname, "../tmp"));
+  },
+  filename: function (req, file, cb) {
+    cb(null, Math.random() + file.originalname);
+  },
+});
+
+const upload = multer({
+  storage,
+  // limits: {},
+});
+
 module.exports = {
   auth,
+  upload,
 };

@@ -24,6 +24,10 @@ const schema = mongoose.Schema({
       ref: "contacts",
     },
   ],
+  avatarURL: {
+    type: String,
+    default: "",
+  },
 });
 
 const User = mongoose.model("users", schema);
