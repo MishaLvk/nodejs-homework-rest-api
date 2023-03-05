@@ -24,9 +24,8 @@ async function sendEmail({ to, subject, html }) {
 
   try {
     await sandGrid.send(msg);
-    console.log("msg відправлено");
   } catch (error) {
-    console.error("нечого не вийшло");
+    console.error(error);
   }
 }
 

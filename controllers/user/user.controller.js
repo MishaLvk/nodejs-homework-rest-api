@@ -1,5 +1,6 @@
 // const { User } = require("../../models/user");
-
+require("dotenv").config();
+const { PORT } = process.env;
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { User } = require("../../models/user.js");
@@ -28,7 +29,7 @@ async function register(req, res, next) {
     sendEmail({
       to: email,
       subject: "User verification",
-      html: `Please confirm your email by clicking on  <a href="http://localhost:3000/api/users/verify/${verificationToken}">this link</a> `,
+      html: `Please confirm your email by clicking on  <a href="http://localhost:${PORT}/api/users/verify/${verificationToken}">this link</a> `,
     });
 
     res.status(201).json({
@@ -143,7 +144,7 @@ async function uploadImage(req, res, next) {
   await User.findByIdAndUpdate(
     _id,
     {
-      avatarURL: `http://localhost:${process.env.PORT}/avatars/${filename}`,
+      avatarURL: `http://localhost:${PORT}/avatars/${filename}`,
     },
     {
       new: true,
@@ -208,14 +209,10 @@ async function reVerifyEmail(req, res, next) {
   sendEmail({
     to: email,
     subject: "re-verification of the user",
-    html: `Please confirm your email by clicking on  <a href="http://localhost:3000/api/users/verify/${newVerificationToken}">this link</a> `,
+    html: `Please confirm your email by clicking on  <a href="http://localhost:${PORT}/api/users/verify/${newVerificationToken}">this link</a> `,
   });
 
-  return res.status(200).json({
-    data: {
-      ok: user.verificationToken,
-    },
-  });
+  return res.status(200).json({ message: "Verification email sent" });
 }
 
 module.exports = {
