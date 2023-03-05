@@ -8,6 +8,8 @@ const {
   current,
   logout,
   uploadImage,
+  verifyEmail,
+  reVerifyEmail,
 } = require("../../controllers/user/user.controller.js");
 
 const { auth, upload } = require("../../middlewares/index.js");
@@ -21,7 +23,12 @@ userRouter.get("/", tryCatchWrapper(auth), tryCatchWrapper(getContacts));
 
 userRouter.get("/current", tryCatchWrapper(auth), tryCatchWrapper(current));
 
+userRouter.get("/verify/:token", tryCatchWrapper(verifyEmail));
+
 userRouter.post("/logout", tryCatchWrapper(auth), tryCatchWrapper(logout));
+
+userRouter.post("/verify", tryCatchWrapper(reVerifyEmail));
+
 userRouter.patch(
   "/avatars",
   tryCatchWrapper(auth),

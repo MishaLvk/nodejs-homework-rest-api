@@ -1,3 +1,7 @@
+require("dotenv").config();
+const sandGrid = require("@sendgrid/mail");
+const { SENDGRID_API_KEY } = process.env;
+
 function tryCatchWrapper(enpointFn) {
   return async (req, res, next) => {
     try {
@@ -8,6 +12,24 @@ function tryCatchWrapper(enpointFn) {
   };
 }
 
+async function sendEmail({ to, subject, html }) {
+  sandGrid.setApiKey(SENDGRID_API_KEY);
+  const msg = {
+    from: "lvk.misha@meta.ua",
+    to,
+    subject,
+    html,
+    text: "and easy to do anywhere, even with Node.js",
+  };
+
+  try {
+    await sandGrid.send(msg);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 module.exports = {
   tryCatchWrapper,
+  sendEmail,
 };
